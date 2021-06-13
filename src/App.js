@@ -1,11 +1,14 @@
-
+import Sidebar from './Sidebar'
 import './App.css';
 
 function App() {
   return (
     //BEM naming convention
-    <div className="App">
-      
+    <div className="app">
+      <div className='app__body'>
+        <Sidebar />
+        {/* Chat */}
+      </div>
     </div>
   );
 }
