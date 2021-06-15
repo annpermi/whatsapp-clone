@@ -8,6 +8,8 @@ import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import MicIcon from '@material-ui/icons/Mic';
 import './chat.css';
 import db from '../firebase';
+import firebase from 'firebase';
+import {useStateValue} from "../StateProvider";
 
 function Chat() {
     const [seed, setSeed] = useState('');
@@ -15,6 +17,8 @@ function Chat() {
     //Show messages based on the room
     const { roomId } = useParams();
     const [roomName, setRoomName] = useState('');
+    const [messages, setMessages] = useState([]);
+    const [{user}, dispatch] = useStateValue();
     //Depends on our roomId , change the room
     useEffect(() => {
         if(roomId) {
@@ -22,6 +26,11 @@ function Chat() {
             db.collection('rooms').doc(roomId).onSnapshot((snapshot) => { //when gat a snapchat, use that room name
                 setRoomName(snapshot.data().name) //it will get inside and pull that data
             })
+
+            db.collection('rooms').doc(roomId).collection("messages").orderBy("timestamp","asc").onSnapshot(snapshot => {
+                setMessages(snapshot.docs.map(doc => doc.data()))
+            });
+            //it will get inside and pull that data from db
         }
     },[roomId])
 
@@ -32,6 +41,12 @@ function Chat() {
 
     const sendMessage = (e) => {
         e.preventDefault() /* stop from refreshing  */
+        /* Add messages to db */
+        db.collection('rooms').doc(roomId).collection('messages').add({
+            message: input,
+            name: user.displayName, /* from google autentificacion nuser.displayName */
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),/* time from the server */
+        })
         setInput('')
     }
 
@@ -42,7 +57,14 @@ function Chat() {
 
                 <div className="chat__headerInfo">
                     <h3>{roomName}</h3>
-                    <p>Last seem</p>
+                    <p>
+                        Last seen {" "}
+                        {/* from last message */}
+                        {new Date(
+                            messages[messages.length - 1]?.
+                            timestamp?.toDate()
+                        ).toUTCString()}
+                    </p>
                 </div>
 
                 <div className="chat__headerRight">
@@ -59,11 +81,15 @@ function Chat() {
             </div>
 
             <div className="chat__body">
-                <p className={`chat__message ${true && 'chat__receiver'}`}>
-                    <span className='chat__name'>Anna</span>
-                        Hey guys
-                    <span className='chat__timestamp'>3:52pm</span>
-                </p>
+                {messages.map(message=> (
+                    <p className={`chat__message ${message.name === user.displayName && 'chat__receiver'}`}>{/* messages will appear depends on user name on data */}
+                    <span className='chat__name'>{message.name}</span>
+                        {message.message}
+                    <span className='chat__timestamp'>
+                        {new Date(message.timestamp ?.toDate()).toUTCString()} {/* SHOW REAL */}
+                    </span>
+                    </p>
+                ))}
             </div>
 
             <div className="chat__footer">

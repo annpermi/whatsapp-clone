@@ -6,6 +6,16 @@ import './sidebarChat.css';
 
 function SidebarChat( {addNewChat, name, id}) {
     const [seed, setSeed] = useState('');
+    const [messages, setMessages] = useState("");
+
+    /* show last message on sideBar */
+    useEffect(() => {
+        if(id){
+            db.collection('rooms').doc(id).collection('messages').orderBy('timestamp','desc').onSnapshot(snapshot => {
+                setMessages(snapshot.docs.map((doc) => doc.data()))
+            })
+        }
+    }, [id]);
 
     /* Random user */
     useEffect(()=>{
@@ -30,7 +40,7 @@ function SidebarChat( {addNewChat, name, id}) {
             <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`}/>
             <div className="sidebarChat__info">
                 <h2>{name}</h2> {/* from data base */}
-                <p>Last message...</p>
+                <p>{messages[0]?.message}</p>{/* desendeing */}
             </div>
         </div>
         </Link>
@@ -41,4 +51,4 @@ function SidebarChat( {addNewChat, name, id}) {
     )
 }
 
-export default SidebarChat
+export default SidebarChat;
