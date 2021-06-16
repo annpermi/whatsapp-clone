@@ -23,9 +23,9 @@ function Sidebar() {
             )
         )
         /* clean up function when component unmount, when u finish using */
-        return ()=>{
-            // unsubscribe();
-        }
+        // return () => {
+        //     unsubscribe();
+        // }
     }, [])
     return (
         <div className='sidebar'>
