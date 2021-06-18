@@ -18,7 +18,7 @@ function Chat() {
     const { roomId } = useParams();
     const [roomName, setRoomName] = useState('');
     const [messages, setMessages] = useState([]);
-    const [{user}, dispatch] = useStateValue();
+    const [{user}, dispatch ] = useStateValue();
     //Depends on our roomId , change the room
     useEffect(() => {
         if(roomId) {
@@ -61,8 +61,7 @@ function Chat() {
                         Last seen {" "}
                         {/* from last message */}
                         {new Date(
-                            messages[messages.length - 1]?.
-                            timestamp?.toDate()
+                            messages[messages.length - 1]?.timestamp?.toDate()
                         ).toUTCString()}
                     </p>
                 </div>
@@ -86,7 +85,7 @@ function Chat() {
                     <span className='chat__name'>{message.name}</span>
                         {message.message}
                     <span className='chat__timestamp'>
-                        {new Date(message.timestamp ?.toDate()).toUTCString()} {/* SHOW REAL */}
+                        {new Date(message.timestamp?.toDate()).toUTCString()} {/* SHOW REAL */}
                     </span>
                     </p>
                 ))}
