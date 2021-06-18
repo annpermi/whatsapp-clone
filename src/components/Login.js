@@ -7,7 +7,7 @@ import { useStateValue } from '../StateProvider';
 
 function Login() {
     //get the dispatch
-    const [{}, dispatch] = useStateValue();
+    const [dispatch] = useStateValue();
 
     //Add google authentication
     const signIn = () => {
