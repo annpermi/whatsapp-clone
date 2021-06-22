@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { Avatar } from "@material-ui/core";
 import db from '../firebase';
 import './sidebarChat.css';
@@ -23,7 +23,7 @@ function SidebarChat( {addNewChat, name, id}) {
     }, []);
 
     const createChat = () => {
-        const roomName = prompt('Please enter name for chat room')
+        const roomName = prompt('Please enter name for chat room');
 
         if(roomName){
             //push information to database

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import './login.css'
+import './login.css';
 import { auth, provider } from '../firebase';
 import { actionTypes } from '../reducer';
 import { useStateValue } from '../StateProvider';

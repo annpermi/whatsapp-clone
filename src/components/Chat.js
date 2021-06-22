@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
 import { Avatar, IconButton } from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { AttachFile } from '@material-ui/icons';
@@ -25,14 +25,14 @@ function Chat() {
             //inside the rooms, going to the specific doc, which in specific room and use that roomId 
             db.collection('rooms').doc(roomId).onSnapshot((snapshot) => { //when gat a snapchat, use that room name
                 setRoomName(snapshot.data().name) //it will get inside and pull that data
-            })
+            });
 
             db.collection('rooms').doc(roomId).collection("messages").orderBy("timestamp","asc").onSnapshot(snapshot => {
                 setMessages(snapshot.docs.map(doc => doc.data()))
             });
             //it will get inside and pull that data from db
         }
-    },[roomId])
+    },[roomId]);
 
     /* Random user*/
     useEffect(()=>{
@@ -40,14 +40,14 @@ function Chat() {
     }, [roomId]); //everytime when roomId changes
 
     const sendMessage = (e) => {
-        e.preventDefault() /* stop from refreshing  */
+        e.preventDefault(); /* stop from refreshing  */
         /* Add messages to db */
         db.collection('rooms').doc(roomId).collection('messages').add({
             message: input,
             name: user.displayName, /* from google autentificacion nuser.displayName */
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),/* time from the server */
         })
-        setInput('')
+        setInput('');
     }
 
     return (
